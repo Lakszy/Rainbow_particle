@@ -1,8 +1,3 @@
-
-import {
-  MAPProtocolTestnet, MAPProtocol, Mantle,
-} from '@particle-network/chains';
-
 import React, { useMemo } from 'react';
 import { ConnectButton, connectorsForWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { argentWallet, coinbaseWallet, imTokenWallet, injectedWallet, ledgerWallet, metaMaskWallet, omniWallet, rainbowWallet, trustWallet, walletConnectWallet } from '@rainbow-me/rainbowkit/wallets';
@@ -10,31 +5,29 @@ import { argentWallet, coinbaseWallet, imTokenWallet, injectedWallet, ledgerWall
 import { ParticleNetwork } from '@particle-network/auth';
 import { particleWallet } from '@particle-network/rainbowkit-ext';
 
-
 import '@rainbow-me/rainbowkit/styles.css';
 import './App.css';
 
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import { arbitrum, mainnet, optimism, polygon } from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
-import { useConnectModal } from '@particle-network/btc-connectkit';
 
-const { openConnectModal, disconnect } = useConnectModal();
 const PageRainbowKit = () => {
+  console.log("lalal")
   const projectId = "3c7ddc5f-e2a6-4466-ad3b-ed1296379bf2"; // Manually entered REACT_APP_PROJECT_ID
   const clientKey = "cXLN1RJCzme0TJF2TQR8Q8mwm5e98VHu8qise60d"; // Manually entered REACT_APP_CLIENT_KEY
   const appId = "15e2e30a-f8d6-407d-ae81-7022c7206e9f"; // Manually entered REACT_APP_APP_ID
   const walletConnectProjectId = "c888e62e3e9736e6572ed638ab170a72"; // Manually entered REACT_APP_WALLETCONNECT_PROJECT_ID
-
+  
   console.log(projectId, "projectId");
 
   const particle = useMemo(() => new ParticleNetwork({
-    projectId: projectId,
+    projectId: appId,
     clientKey: clientKey,
     appId: appId,
     chainName: 'Ethereum',
     chainId: 1,
-    // wallet: { displayWalletEntry: true },
+    wallet: { displayWalletEntry: true },
   }), []);
 
   console.log(particle, "particle");
@@ -50,6 +43,9 @@ const PageRainbowKit = () => {
   const popularWallets = useMemo(() => ({
     groupName: 'Popular',
     wallets: [
+      particleWallet({ chains, authType: 'google' }),
+      particleWallet({ chains, authType: 'facebook' }),
+      particleWallet({ chains, authType: 'apple' }),
       particleWallet({ chains }),
       injectedWallet(commonOptions),
       rainbowWallet(commonOptions),
@@ -64,7 +60,11 @@ const PageRainbowKit = () => {
     {
       groupName: 'Other',
       wallets: [
+        argentWallet(commonOptions),
         trustWallet(commonOptions),
+        omniWallet(commonOptions),
+        imTokenWallet(commonOptions),
+        ledgerWallet(commonOptions),
       ],
     },
   ]);
